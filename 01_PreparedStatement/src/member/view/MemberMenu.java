@@ -32,6 +32,7 @@ public class MemberMenu {
 			String msg = null;
 			List<Member> list = null;
 			String memberId = null;
+			String password = null;
 			String memberName = null;
 			
 			switch(choice) {
@@ -69,19 +70,15 @@ public class MemberMenu {
 					//회원정보 변경
 					//암호, 이메일, 전화번호, 주소, 취미를 일괄변경하도록 한다.
 					
-					//id, 암호, 메일 ,전번 ,주소, 취미 입력값 받기
+					//id와 비밀번호 입력받기
 					memberId = inputMemberId();
-					String newPassword = inputUpdatePassword();
-					String newEmail = inputUpdateEmail();
-					String newPhone = inputUpdatePhone();
-					sc.nextLine(); //개행날림용
-					String newAddress = inputUpdateAddress();
-					String newHobby = inputUpdateHobby();
-					//얘네를 좀더 깔끔하게 받을 방법 없나.. member객체로 리턴하자니 없는 값도 있구 킁
-					//파라미터로 받자니 리턴값이 여러개고 흠흠~
+					password = inputPassword();
+					
+					//회원정보 수정
+					member = updateMember(memberId, password);
 					
 					//update문으로 사용자 입력값 대입하기
-					result = memberController.updateMember(newPassword, newEmail, newPhone, newAddress, newHobby, memberId);
+					result = memberController.updateMember(member);
 					
 					//사용자 피드백 보내기 "회원정보 변경 성공 or 실패"
 					msg = result > 0? "회원정보 변경 성공!" : "회원정보 변경 실패!";
@@ -114,28 +111,35 @@ public class MemberMenu {
 		
 	}
 
-	private String inputUpdateHobby() {
-		System.out.println("변경할 취미 입력 (,로 나열할 것): ");
-		return sc.nextLine();
+	private Member updateMember(String memberId, String password) {
+		System.out.println("수정할 회원정보를 입력하세요.");
+		Member member = new Member();
+		member.setMemberId(memberId); //next() 공백이 없는 문자열
+//		System.out.println(member.getMemberId());
+		System.out.println("이름: ");
+		member.setMemberName(sc.next());
+//		System.out.println(member.getMemberName());
+		System.out.println("비밀번호: ");
+		member.setPassword(password);
+		System.out.println("나이: ");
+		member.setAge(sc.nextInt());
+		System.out.println("성별(M/F): ");
+		member.setGender(String.valueOf(sc.next().toUpperCase().charAt(0)));
+		System.out.println("이메일: ");
+		member.setEmail(sc.next());
+		System.out.println("전화번호(-빼고 입력): ");
+		member.setPhone(sc.next());
+		sc.nextLine();
+		System.out.println("주소: ");
+		member.setAddress(sc.nextLine());
+		System.out.println("취미(,로 나열할 것): ");
+		member.setHobby(sc.nextLine());
+		
+		return	member;
 	}
 
-	private String inputUpdateAddress() {
-		System.out.println("변경할 주소 입력: ");
-		return sc.nextLine();
-	}
-
-	private String inputUpdatePhone() {
-		System.out.println("변경할 전화번호 입력: ");
-		return sc.next();
-	}
-
-	private String inputUpdateEmail() {
-		System.out.println("변경할 이메일 입력: ");
-		return sc.next();
-	}
-
-	private String inputUpdatePassword() {
-		System.out.println("변경할 비밀번호 입력: ");
+	private String inputPassword() {
+		System.out.println("비밀번호를 입력하세요: ");
 		return sc.next();
 	}
 
@@ -213,7 +217,7 @@ public class MemberMenu {
 		System.out.println("취미(,로 나열할 것): ");
 		member.setHobby(sc.nextLine());
 		
-		return	member;
+		return member;
 	}
 
 }

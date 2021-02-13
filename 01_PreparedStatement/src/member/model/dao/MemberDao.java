@@ -331,11 +331,11 @@ public class MemberDao {
 		return member;
 	}
 
-	public int updateMember(String newPassword, String newEmail, String newPhone, String newAddress, String newHobby, String memberId) {
+	public int updateMember(Member member) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		//암호, 이메일, 전화번호, 주소, 취미, member_id
-		String sql = "update member set password = ?, email = ?, phone = ?, address = ?, hobby = ? where member_id = ?";
+		String sql = "update member set age = ?, gender = ?, email = ?, phone = ?, address = ?, hobby = ? where member_id = ?";
 		int result = 0;
 		
 		try {
@@ -344,12 +344,14 @@ public class MemberDao {
 			conn.setAutoCommit(false);
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, newPassword);
-			pstmt.setString(2, newEmail);
-			pstmt.setString(3, newPhone);
-			pstmt.setString(4, newAddress);
-			pstmt.setString(5, newHobby);
-			pstmt.setString(6, memberId);
+			
+			pstmt.setInt(1, member.getAge());
+			pstmt.setString(2, member.getGender());
+			pstmt.setString(3, member.getEmail());
+			pstmt.setString(4, member.getPhone());
+			pstmt.setString(5, member.getAddress());
+			pstmt.setString(6, member.getHobby());
+			pstmt.setString(7, member.getMemberId());
 			
 			result = pstmt.executeUpdate();
 			

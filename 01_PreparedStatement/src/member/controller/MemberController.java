@@ -32,8 +32,8 @@ public class MemberController {
 		return memberDao.selectName(memberName);
 	}
 
-	public int updateMember(String newPassword, String newEmail, String newPhone, String newAddress, String newHobby, String memberId) {
-		return memberDao.updateMember(newPassword, newEmail, newPhone, newAddress, newHobby, memberId);
+	public int updateMember(Member member) {
+		return memberDao.updateMember(member);
 	}
 
 	public int deleteMember(String memberId) {
