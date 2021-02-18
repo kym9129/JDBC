@@ -1,10 +1,14 @@
 package common;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /*
  * Service, Dao클래스의 공통부분을 static 메소드로 제공
@@ -13,14 +17,35 @@ import java.sql.SQLException;
 
 public class JDBCTemplate {
 	
-	static String driverClass = "oracle.jdbc.OracleDriver"; //ojdbc에서 제공하는 클래스
-	static String url = "jdbc:oracle:thin:@khmclass.iptime.org:1521:xe";
-//	static String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	static String user = "student";
-	static String password = "student";
+	static String driverClass;
+	static String url;
+	static String user;
+	static String password;
 	
 	//클래스가 사용될 때 처음 1회 실행되는 초기화 블럭
 	static {
+		//data-source.properties의 내용을 읽어서 변수에 대입
+		
+		Properties prop = new Properties();
+		String filename = "resources/data-source.properties";
+		try {
+			prop.load(new FileReader(filename));
+//			System.out.println("prop = " + prop);
+			driverClass = prop.getProperty("driverClass");
+			url = prop.getProperty("url");
+			user = prop.getProperty("user");
+			password = prop.getProperty("password");
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
+		
 //		 * 1. DriverClass등록 (최초1회)
 			try {
 				Class.forName(driverClass);

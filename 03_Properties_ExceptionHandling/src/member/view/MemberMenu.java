@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import member.controller.MemberController;
 import member.model.vo.Member;
+import member.model.vo.MemberDel;
 
 public class MemberMenu {
 	
@@ -20,6 +21,7 @@ public class MemberMenu {
 				+ "4. 회원 가입\n"
 				+ "5. 회원 정보변경\n"
 				+ "6. 회원 탈퇴\n"
+				+ "7. 탈퇴 회원 조회\n"
 				+ "0. 프로그램 끝내기\n"
 				+ "-----------------------------------------\n"
 				+ "선택 : ";
@@ -35,6 +37,7 @@ public class MemberMenu {
 			String msg = null;
 			String title = null;
 			String column = null;
+			List<MemberDel> dList = null;
 			
 			switch(choice) {
 			case "1": 
@@ -165,6 +168,13 @@ public class MemberMenu {
 				displayMsg(result, msg, title);
 				
 				break;
+			case "7": //탈퇴 회원 조회
+				//탈퇴 회원 모두 조회 (member_del테이블)
+				dList = memberController.selectAllDel();
+				//탈퇴 회원 표시
+				displayDelMemberList(dList);
+				
+				break;
 			case "0": 
 				System.out.println("정말 끝내시겠습니까? (y/n) : ");
 				if(sc.next().toUpperCase().charAt(0) == 'Y')
@@ -254,6 +264,29 @@ public class MemberMenu {
 		} else {
 			System.out.println(">>> 조회된 회원 정보가 없습니다.");
 		}
+		
+	}
+	
+	private void displayDelMemberList(List<MemberDel> dList) {
+		if(dList != null && !(dList.isEmpty())) {
+			System.out.println("============================================");
+			for(int i = 0; i < dList.size(); i++) {
+				System.out.println((i + 1) + " : " + dList.get(i));
+			}
+			System.out.println("============================================");
+		} else {
+			System.out.println(">>> 조회된 탈퇴회원 정보가 없습니다.");
+		}
+		
+	}
+
+	/**
+	 * 사용자에게 오류메세지 출력하기
+	 * @param errorMsg
+	 */
+	public void displayError(String errorMsg) {
+		// TODO Auto-generated method stub
+		System.err.println(errorMsg); //에러메세지 출력
 		
 	}
 
