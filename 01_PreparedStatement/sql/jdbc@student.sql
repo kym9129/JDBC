@@ -110,3 +110,55 @@ select * from member_del;
 
 delete from member
 where member_id = 'honggd';
+
+--------------------------------------------
+/*
+2021.02.18 @최종실습문제
+상품재고관리프로그램을 작성하세요.
+
+다음과 같은 데이터를 담을수 있도록 처리하세요.
+--------------------------------------------------------------
+product_id	    p_name	    price	    description     stock
+--------------------------------------------------------------
+nb_ss7		    삼성노트북  1570000	    시리즈 7		   55
+nb_macbook_air	맥북에어	1200000	    애플 울트라북	    0
+pc_ibm		    ibmPC	    750000	    windows 8	      10
+--------------------------------------------------------------
+
+상품테이블 PRODUCT_STOCK
+* PRODUCT_ID  VARCHAR2(30) PRIMARY KEY,
+* PRODUCT_NAME  VARCHAR2(30)  NOT NULL,
+* PRICE NUMBER(10)  NOT NULL,
+* DESCRIPTION VARCHAR2(50),
+* STOCK NUMBER DEFAULT 0 
+*/
+
+
+create table product_stock(
+    product_id varchar2(30), --pk
+    p_name varchar2(30) not null,
+    price number(10) not null,
+    description varchar2(50),
+    stock number default 0,
+    constraint pk_p_stock_id primary key(product_id)
+);
+
+/*
+상품입출고 테이블 PRODUCT_IO
+* IO_NO NUMBER PRIMARY KEY => sequence처리할 것.
+* PRODUCT_ID VARCHAR2(30) => PRODUCT_STOCK테이블 PRODUCT_ID 참조
+* IODATE DATE DEFAULT SYSDATE
+* AMOUNT NUMBER
+* STATUS CHAR(1) CHECK (STATUS IN ('I', 'O'))
+*/
+
+create table product_io(
+    io_no number, --pk, seq
+    product_id varchar2(30), --fk
+    iodate date default sysdate,
+    amount number,
+    status char(1), --check(status in ('I', 'O')
+    constraint pk_io_no primary key(io_no),
+    constraint fk_io_product_id foreign key(product_id) references product_stock(product_id),
+    constraint ck_status check(status in ('I', 'O'))
+);
